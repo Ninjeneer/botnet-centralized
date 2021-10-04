@@ -1,11 +1,14 @@
 from typing import Dict, List
 from flask import Flask, request, send_file, render_template
 from flask_socketio import SocketIO, emit
+from flask_cors import CORS, cross_origin
 import jsonpickle
 
 from botnet_activity import BotnetActivity
 
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 sio = SocketIO(app)
 
 botnets = []
@@ -41,6 +44,7 @@ def command_control():
     return "Done"
 
 @app.route('/botnets', methods=["GET"])
+@cross_origin()
 def get_botnets():
     return jsonpickle.encode(list(map(jsonpickle.encode, botnets)))
 

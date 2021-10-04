@@ -1,0 +1,104 @@
+body {
+    width: 80%;
+    margin: auto;
+    border: 1px solid gray;
+}
+
+header {
+    text-align: center;
+    border-bottom: 2px solid black;
+}
+
+.content {
+    display: flex;
+}
+
+.command-panel {
+    flex: 4;
+}
+
+.botnet-activity {
+    flex: 1;
+    border-left: 1px solid black;
+}
+
+.server-url-config {
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+}
+
+.server-url-config > input[type=text] {
+    width: 75%;
+}
+
+.server-url-config > button {
+    width: 20%;
+}
+
+.panel {
+    background-color: rgb(216, 216, 216);
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+.command-picker {
+    width: 100%;
+    display: flex;
+    align-items: stretch;
+}
+
+.command-picker .btn-command {
+    flex: 1;
+    padding: 10px;
+    height: 50px;
+    line-height: 50px;
+    display: block;
+    background-color:rgb(216, 216, 216);
+    text-align: center;
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+.command-picker .btn-command:hover {
+    background-color: gray;
+    transition-duration: 0.5s;
+    cursor: pointer;
+}
+
+.command-picker .btn-command:last-of-type {
+    border-right: 0;
+}
+
+textarea {
+    width: 100%;
+    min-height: 400px;
+}
+
+.send-command {
+    display: block;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    padding: 10px;
+    background-color: rgb(34, 105, 34);
+    color: white;
+    font-weight: bold;
+}
+
+.send-command:hover {
+    cursor: pointer;
+    background-color: rgb(24, 71, 24);
+    transition-duration: 0.5s;
+}
+
+.botnet {
+    padding: 5px;
+    border-bottom: 1px solid black;
+    line-height: 0.5em;
+    overflow-y: auto;
+}
+
+.botnet b {
+    font-size: 0.7em;
+}

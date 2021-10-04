@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Botnet dashboard</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+    <header>
+        <h1>Botnet dashboard</h1>
+    </header>
+
+    <div class="content">
+        <div class="command-panel">
+            <!-- Command panel -->
+            <div class="panel">
+                <h2>Central server configuration</h2>
+                <div class="server-url-config">
+                    <input type="text" class="server-url" placeholder="Central server URL" id="serverUrl" value="http://localhost:5000">
+                    <button class="btn btn-primary ml-2" onclick="saveServerUrl()">Save</button>    
+                </div>
+            </div>
+            
+    
+            <div class="command-picker">
+                <a class="btn-command">DDoS</a>
+                <a class="btn-command">RCE</a>
+            </div>
+    
+            <div class="panel">
+                <h2>Command configuration</h2>
+                <textarea></textarea>
+            </div>
+    
+            <a class="send-command">Send command</a>
+        </div>
+
+        <div class="botnet-activity"></div>
+    </div>
+</body>
+
+<script src="dashboard.js" defer></script>
+
+</html>
