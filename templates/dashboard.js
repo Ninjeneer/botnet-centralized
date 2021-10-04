@@ -40,6 +40,17 @@ function renderBotnets(botnets) {
     }
 }
 
+function fillCommandDDoS() {
+    const textarea = document.getElementById('command');
+    textarea.innerText = `{\\\n
+        "type": "ddos",
+        "target_ip": "",
+        "target_port": 80,
+        "fake_ip": "",
+        "nb_threads": 5
+    }`
+}
+
 window.addEventListener('load', function() {
     this.setInterval(getBotnets, 1000);
 })
