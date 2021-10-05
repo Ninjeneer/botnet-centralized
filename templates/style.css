@@ -79,20 +79,36 @@ textarea {
     min-height: 400px;
 }
 
-.send-command {
+.big-btn {
     display: block;
     height: 50px;
     line-height: 50px;
     text-align: center;
     padding: 10px;
-    background-color: rgb(34, 105, 34);
     color: white;
     font-weight: bold;
+    margin-top: 10px;
+}
+
+.big-btn:hover {
+    cursor: pointer;
+}
+
+.send-command {
+    background-color: rgb(34, 105, 34);
 }
 
 .send-command:hover {
-    cursor: pointer;
     background-color: rgb(24, 71, 24);
+    transition-duration: 0.5s;
+}
+
+.stop-command {
+    background-color: rgb(145, 39, 39);
+}
+
+.stop-command:hover {
+    background-color: rgb(105, 28, 28);
     transition-duration: 0.5s;
 }
 
@@ -105,4 +121,19 @@ textarea {
 
 .botnet b {
     font-size: 0.7em;
+}
+
+.botnet.running {
+    border-left: 10px solid rgb(38, 102, 38);
+}
+
+.botnet.hold {
+    border-left: 10px solid rgb(194, 144, 35);
+}
+
+input[type=text],
+input[type=number],
+textarea {
+    padding: 7px;
+    box-sizing: border-box;
 }

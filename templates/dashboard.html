@@ -4,6 +4,7 @@
 <head>
     <title>Botnet dashboard</title>
     <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8" />
 </head>
 
 <body>
@@ -33,7 +34,8 @@
                 <form id="command-configuration"></form>
             </div>
     
-            <a class="send-command">Send command</a>
+            <a class="big-btn send-command" onclick="sendCommand()">Send command</a>
+            <a class="big-btn stop-command" onclick="stopCommand()">Stop command</a>
         </div>
 
         <div class="botnet-activity"></div>
