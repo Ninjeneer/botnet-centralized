@@ -62,8 +62,6 @@ function generateCommandConfigurationForm(command) {
             setCodeEditorEvents();
         }
     }
-
-    
 }
 
 function getInput(type, key, value) {
@@ -75,12 +73,11 @@ function getInput(type, key, value) {
         case 'textarea':
             return `<textarea name=${key} placeholder="${key}" class='command-value'>${value}</textarea>`
         case 'code':
-            return `<div id="editor" style="height: 500px;"></div>`
+            return `<div id="editor" style="min-height: 500px;"></div>`
     }
 }
 
 function setCodeEditorEvents() {
-    const codeEditor = document.getElementById('code-editor');
     const editor = ace.edit("editor");
     editor.setTheme("ace/theme/monokai");
     editor.session.setMode("ace/mode/python");
