@@ -56,10 +56,14 @@ function generateCommandConfigurationForm(command) {
             <div style="margin-bottom: 10px;">
                 <p style="display: inline;">${commandDef[key].label}</p>
                 ${getInput(commandDef[key].type, key, commandDef[key].value)}
-                
             </div>
         `);
+        if (commandDef[key].type === 'code') {
+            setCodeEditorEvents();
+        }
     }
+
+    
 }
 
 function getInput(type, key, value) {
@@ -70,7 +74,16 @@ function getInput(type, key, value) {
             return `<input type="number" name=${key} placeholder="${key}" value="${value}" class='command-value' />`
         case 'textarea':
             return `<textarea name=${key} placeholder="${key}" class='command-value'>${value}</textarea>`
+        case 'code':
+            return `<div id="editor" style="height: 500px;"></div>`
     }
+}
+
+function setCodeEditorEvents() {
+    const codeEditor = document.getElementById('code-editor');
+    const editor = ace.edit("editor");
+    editor.setTheme("ace/theme/monokai");
+    editor.session.setMode("ace/mode/python");
 }
 
 function getCommandConfig(name) {
@@ -87,7 +100,7 @@ function getCommandConfig(name) {
 
         case 'rce':
             Object.assign(command, {
-                payload: { type: "textarea", value: "", label: "Code payload" }
+                payload: { type: "code", value: "// Your code here", label: "Code payload" }
             });
             break;
     }
@@ -102,12 +115,12 @@ function sendCommand() {
         for (const input of inputs) {
             Object.assign(payload, { [input.name]: input.value });
         }
-    
+
         const xhr = new XMLHttpRequest();
         xhr.open('POST', `${serverURL}/command`);
         xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
         xhr.send(JSON.stringify(payload));
-    
+
         alert('Command successfully sent !');
     }
 }
@@ -117,7 +130,7 @@ function stopCommand() {
         const xhr = new XMLHttpRequest();
         xhr.open('POST', `${serverURL}/command/stop`);
         xhr.send();
-    
+
         alert('STOP command successfully sent!');
     }
 }

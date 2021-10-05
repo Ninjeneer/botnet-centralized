@@ -5,6 +5,9 @@
     <title>Botnet dashboard</title>
     <link rel="stylesheet" href="style.css" />
     <meta charset="UTF-8" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.13/ace.min.js" integrity="sha512-jB1NOQkR0yLnWmEZQTUW4REqirbskxoYNltZE+8KzXqs9gHG5mrxLR5w3TwUn6AylXkhZZWTPP894xcX/X8Kbg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.13/mode-python.min.js" integrity="sha512-5quc8iiv3k68XXN7adEav7dyI4bnTDz7WSa99HZmgJk8gZlabsTQibJso2fAZpSO598IZIasgfu/StF9oX+kqQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.13/theme-monokai.min.js" integrity="sha512-wZYGbdk0giM73l8BLDNfSEziApAmH8DvXey6zNLG3QUgDeDsMAPm3FIdjhLwrGOWO0vdVHkVxeUzOBR0Hc/xBA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 
 <body>
@@ -18,22 +21,23 @@
             <div class="panel">
                 <h2>Central server configuration</h2>
                 <div class="server-url-config">
-                    <input type="text" class="server-url" placeholder="Central server URL" id="serverUrl" value="http://localhost:5000">
-                    <button class="btn btn-primary ml-2" onclick="saveServerUrl(this)">Save</button>    
+                    <input type="text" class="server-url" placeholder="Central server URL" id="serverUrl"
+                        value="http://localhost:5000">
+                    <button class="btn btn-primary ml-2" onclick="saveServerUrl(this)">Save</button>
                 </div>
             </div>
-            
-    
+
+
             <div class="command-picker">
                 <a class="btn-command" onclick="generateCommandConfigurationForm('ddos')">DDoS</a>
                 <a class="btn-command" onclick="generateCommandConfigurationForm('rce')">RCE</a>
             </div>
-    
+
             <div class="panel">
                 <h2>Command configuration</h2>
                 <form id="command-configuration"></form>
             </div>
-    
+
             <a class="big-btn send-command" onclick="sendCommand()">Send command</a>
             <a class="big-btn stop-command" onclick="stopCommand()">Stop command</a>
         </div>
