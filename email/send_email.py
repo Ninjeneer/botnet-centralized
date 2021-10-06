@@ -4,7 +4,7 @@ from email.mime.multipart import MIMEMultipart
 import smtplib
 
 fromaddr = "ensicaen.securite.2021@gmail.com"
-#TODO Antho : Faire la lecture fichier pour la liste des adresses mails
+# TODO Antho : Faire la lecture fichier pour la liste des adresses mails
 toaddr = "lemazier.elise@gmail.com"
 
 html = open("../templates/page_mail.html")
@@ -12,13 +12,13 @@ msg = MIMEMultipart('alternative')
 msg = MIMEText(html.read(), 'html')
 msg['From'] = fromaddr
 msg['To'] = toaddr
-msg['Subject'] =  "Mise à jour sécurité Firefox"
+msg['Subject'] = "Mise à jour sécurité Firefox"
 
 debug = False
 if debug:
     print(msg.as_string())
 else:
-    server = smtplib.SMTP('smtp.gmail.com',587)
+    server = smtplib.SMTP('smtp.gmail.com', 587)
     server.starttls()
 
     # Autoriser les applications moins sécurisées

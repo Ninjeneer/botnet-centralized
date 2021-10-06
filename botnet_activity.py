@@ -1,5 +1,6 @@
 import time
 
+
 class BotnetActivity:
     def __init__(self, uuid: str, running: bool):
         self.uuid = uuid

