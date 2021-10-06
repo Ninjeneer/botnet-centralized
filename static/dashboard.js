@@ -14,6 +14,7 @@ function saveServerUrl(button) {
         button.innerText = "Save"
     }, 1000);
     window.localStorage.setItem('serverURL', serverURL);
+    document.getElementById("bt-send").disabled = false;
 }
 
 /**
@@ -173,7 +174,16 @@ function sendCommand() {
         xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
         xhr.send(JSON.stringify(payload));
 
-        alert('Command successfully sent !');
+        xhr.onload = () => {
+            if (xhr.status === 200)
+                alert('Command successfully sent !');
+            else
+                alert(xhr.responseText)
+        }
+
+        xhr.onerror = () => {
+            alert(xhr.responseText)
+        }
     }
 }
 
@@ -186,7 +196,16 @@ function stopCommand() {
         xhr.open('POST', `${serverURL}/command/stop`);
         xhr.send();
 
-        alert('STOP command successfully sent!');
+        xhr.onload = () => {
+            if (xhr.status === 200)
+                alert('STOP command successfully sent!');
+            else
+                alert(xhr.responseText)
+        }
+
+        xhr.onerror = () => {
+            alert(xhr.responseText)
+        }
     }
 }
 
