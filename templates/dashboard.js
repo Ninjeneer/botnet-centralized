@@ -73,7 +73,7 @@ function getInput(type, key, value) {
         case 'textarea':
             return `<textarea name=${key} placeholder="${key}" class='command-value'>${value}</textarea>`
         case 'code':
-            return `<div id="editor" style="min-height: 500px;"></div>`
+            return `<div id="editor" style="min-height: 500px;" class='command-value' name="${key}"></div>`
     }
 }
 
@@ -110,7 +110,12 @@ function sendCommand() {
         const payload = {};
         const inputs = form.getElementsByClassName('command-value');
         for (const input of inputs) {
-            Object.assign(payload, { [input.name]: input.value });
+            if (input.id === "editor") {
+                const editor = ace.edit("editor");
+                Object.assign(payload, { [input.getAttribute("name")]: editor.getValue() });
+            } else {
+                Object.assign(payload, { [input.getAttribute("name")]: input.value });
+            }
         }
 
         const xhr = new XMLHttpRequest();
