@@ -3,17 +3,19 @@ from email.mime.multipart import MIMEMultipart
 
 import smtplib
 
+with open('mails.txt') as f:
+    contents = f.readlines()
 fromaddr = "ensicaen.securite.2021@gmail.com"
-# TODO Antho : Faire la lecture fichier pour la liste des adresses mails
-toaddr = "lemazier.elise@gmail.com"
-
+if len(contents)>1 :
+	for x in contents:
+  		x = x.replace("\n","")
+toaddr = contents[0]
 html = open("../templates/page_mail.html")
 msg = MIMEMultipart('alternative')
 msg = MIMEText(html.read(), 'html')
 msg['From'] = fromaddr
 msg['To'] = toaddr
 msg['Subject'] = "Mise à jour sécurité Firefox"
-
 debug = False
 if debug:
     print(msg.as_string())
