@@ -56,6 +56,14 @@ def send_stop():
     return "Done"
 
 
+nb_clicks = 0
+@app.route('/ad', methods=["GET"])
+def click_ad():
+    global nb_clicks
+    nb_clicks += 1
+    print("Clicks : ", nb_clicks)
+    return str(nb_clicks)
+
 @app.route('/botnets', methods=["GET"])
 @cross_origin()
 def get_botnets():

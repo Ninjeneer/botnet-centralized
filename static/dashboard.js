@@ -90,6 +90,10 @@ function generateCommandConfigurationForm(command) {
             setCodeEditorEvents();
         }
     }
+    configContainer.insertAdjacentHTML('beforeend', `
+        <label for="cb-force-command">Force command</label>
+        <input type="checkbox" name="force" id="cb-force-command" class='command-value'/>
+    `);
 }
 
 /**
@@ -120,7 +124,7 @@ function setCodeEditorEvents() {
     editor.setTheme("ace/theme/monokai");
     editor.session.setMode("ace/mode/python");
     editor.setValue("# Your python code here");
-    editor.on('change', function(e) {
+    editor.on('change', function (e) {
         // If a code is in the editor, require a confirmation before changing command
         confirmLeaveCommand = editor.getValue().length > 0;
     });
@@ -148,6 +152,12 @@ function getCommandConfig(name) {
                 payload: { type: "code", value: "// Your code here", label: "Code payload" }
             });
             break;
+
+        case 'click':
+            Object.assign(command, {
+                url: { type: "text", value: "http://", label: "URL" }
+            });
+            break;
     }
     return command;
 }
@@ -165,7 +175,7 @@ function sendCommand() {
                 const editor = ace.edit("editor");
                 Object.assign(payload, { [input.getAttribute("name")]: editor.getValue() });
             } else {
-                Object.assign(payload, { [input.getAttribute("name")]: input.value });
+                Object.assign(payload, { [input.getAttribute("name")]: input.getAttribute('type') === 'checkbox' ? input.checked : input.value });
             }
         }
 
