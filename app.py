@@ -70,11 +70,9 @@ def myscript():
     path = "Shell_script/totallyNotSuspiciousFile.sh"
     return send_file(path)
 
-
 @app.route('/home')
 def home():
     return render_template("page_web.html")
-
 
 if __name__ == '__main__':
     sio.run(app)
