@@ -2,6 +2,9 @@ import time
 
 
 class BotnetActivity:
+    """
+    Represent the activity of a Botnet
+    """
     def __init__(self, uuid: str, running: bool):
         self.uuid = uuid
         self.count = 1

