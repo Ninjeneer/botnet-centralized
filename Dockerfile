@@ -1,6 +1,6 @@
-FROM debian:11
+FROM alpine:latest
 
-RUN apt update && apt install python3 python3-pip -y
+RUN apk update && apk add python3 python3-dev python3-pip
 
 ADD . /app/
 WORKDIR /app

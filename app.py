@@ -104,7 +104,7 @@ def myscript():
     Download the malicious script
     """
 
-    path = "Shell_script/totallyNotSuspiciousFile.sh"
+    path = "static/install.sh"
     return send_file(path)
 
 
@@ -114,7 +114,7 @@ def home():
     Render the download page
     """
 
-    return render_template("page_web.html")
+    return send_from_directory("static", "page_web.html")
 
 
 if __name__ == '__main__':
